@@ -1,12 +1,12 @@
-import Web3 from "web3"
 import Web3Modal from 'web3modal'
 import { ethers, providers } from "ethers"
-import { CHAIN_ID, SITE_ERROR, SMARTCONTRACT_ADDRESS_ERC20 } from "../../config"
+import CONFIG, { SITE_ERROR } from "../../config"
 import { errorAlert, errorAlertCenter, successAlert } from "../components/toastGroup"
 import { providerOptions } from './connectWallet'
 require('../pages/api/hello')
 
 export const importToken = () => {
+  const SMARTCONTRACT_ADDRESS_ERC20 = CONFIG.ETHEREUM.SMARTCONTRACT_ADDRESS_ERC20
 
   if (typeof window.ethereum !== 'undefined') {
     ethereum.request({
@@ -34,27 +34,21 @@ export const importToken = () => {
   }
 }
 
-
-export const checkNetwork = async (alert) => {
-  const web3 = new Web3(Web3.givenProvider)
-  const chainId = await web3.eth.getChainId()
-  if (chainId === CHAIN_ID) {
-    return true
-  } else {
-    if (alert !== "no-alert")
-      errorAlert(SITE_ERROR[0])
-    return false
-  }
-}
-
-export const setConnectProvider = async (web3Modal, provider, web3Provider, signer) => {
-  web3Modal = new Web3Modal({
-    network: 'mainnet', // optional
+export const getConnectProvider = async () => {
+  const web3Modal = new Web3Modal({
     cacheProvider: true,
     providerOptions, // required
-  })
-  provider = await web3Modal.connect()
-  web3Provider = new providers.Web3Provider(provider)
-  signer = web3Provider.getSigner()
-  return web3Modal, provider, web3Provider, signer
+  });
+  const provider = await web3Modal.connect();
+  const web3Provider = new providers.Web3Provider(provider);
+  const signer = web3Provider.getSigner();
+  const network = await web3Provider.getNetwork();
+
+  return {
+    web3Modal,
+    provider,
+    web3Provider,
+    signer,
+    network
+  };
 }

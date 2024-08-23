@@ -1,7 +1,7 @@
 import { Box, Checkbox, IconButton, Modal } from "@mui/material"
 import { useState } from "react"
 import { ClipLoader } from "react-spinners"
-import { SMARTCONTRACT_ABI, SMARTCONTRACT_ABI_ERC20, SMARTCONTRACT_ADDRESS, SMARTCONTRACT_ADDRESS_ERC20 } from "../../config"
+import CONFIG from "../../config"
 import CostSlider from "./CostSlider"
 import { BigStakeButton, BpCheckedIcon, BpIcon } from "./styleHook"
 import { errorAlert, successAlert, warningAlert } from "./toastGroup"
@@ -24,6 +24,7 @@ export default function CardModal({
   reRender,
   useForceUpdate,
   ...props }) {
+  const { SMARTCONTRACT_ABI, SMARTCONTRACT_ABI_ERC20, SMARTCONTRACT_ADDRESS, SMARTCONTRACT_ADDRESS_ERC20 } = CONFIG.BINANCE
   const [agree, setAgree] = useState(false)
   const [amount, setAmount] = useState(1)
   const [loading, setLoading] = useState(false)

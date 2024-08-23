@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import NFTMap from '../components/NFTMap'
 import Web3Modal from "web3modal"
 import Web3 from 'web3'
-import { CHAIN_ID, SITE_ERROR, SMARTCONTRACT_ABI, SMARTCONTRACT_ABI_ERC20, SMARTCONTRACT_ADDRESS, SMARTCONTRACT_ADDRESS_ERC20 } from '../../config'
+import CONFIG from '../../config'
 import { ethers, providers } from 'ethers'
 import Sidebar from '../components/Sidebar'
 import MainContent from '../components/MainContent'
@@ -12,7 +12,7 @@ import Moralis from 'moralis'
 import MobileFooter from '../components/MobileFooter'
 import { errorAlert, errorAlertCenter } from '../components/toastGroup'
 import { providerOptions } from '../hook/connectWallet'
-import { checkNetwork } from '../hook/ethereum'
+import { checkNetwork } from '../hook/connectWallet'
 
 export default function NFTLIST({
   startLoading,
@@ -34,6 +34,7 @@ export default function NFTLIST({
   const [currentSigner, setCurrentSigner] = useState()
   const [signerBalance, setSignerBalance] = useState(0)
   const [loading, setLoading] = useState(false)
+  const { CHAIN_ID, SMARTCONTRACT_ABI, SMARTCONTRACT_ABI_ERC20, SMARTCONTRACT_ADDRESS, SMARTCONTRACT_ADDRESS_ERC20 } = CONFIG.BINANCE
 
   const connectWallet = async () => {
     setLoading(true)

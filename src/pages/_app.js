@@ -11,6 +11,7 @@ function MyApp({ Component, pageProps }) {
   const [hAlert, setHAlert] = useState(true)
 
   try{
+    // setHAlert('Add valid moarlis server creds to fetch data')
     // Moralis.start({ serverUrl: SERVER_URL, appId: APP_ID })
   }
   catch(e) {

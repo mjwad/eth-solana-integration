@@ -8,11 +8,11 @@ import Web3 from 'web3'
 import MainContent from '../components/MainContent'
 import Header from '../components/Header'
 import { providers, ethers } from 'ethers'
-import { CHAIN_ID, SITE_ERROR, SMARTCONTRACT_ABI_ERC20, SMARTCONTRACT_ADDRESS_ERC20 } from '../../config'
+import CONFIG, { SITE_ERROR } from '../../config'
 import { errorAlert, errorAlertCenter } from '../components/toastGroup'
 import MobileFooter from '../components/MobileFooter'
 import { providerOptions } from '../hook/connectWallet'
-import { checkNetwork } from '../hook/ethereum'
+import { checkNetwork } from '../hook/connectWallet'
 
 let web3Modal = undefined
 
@@ -22,42 +22,47 @@ export default function FAQ({ headerAlert, closeAlert }) {
   const [signerAddress, setSignerAddress] = useState("")
   const [signerBalance, setSignerBalance] = useState(0)
   const [loading, setLoading] = useState(false)
+  const { CHAIN_ID, SMARTCONTRACT_ABI_ERC20, SMARTCONTRACT_ADDRESS_ERC20 } = CONFIG.BINANCE
 
   const connectWallet = async () => {
     setLoading(true)
     if (await checkNetwork()) {
-      web3Modal = new Web3Modal({
-        network: 'mainnet', // optional
-        cacheProvider: true,
-        providerOptions, // required
-      })
-      const provider = await web3Modal.connect()
-      const web3Provider = new providers.Web3Provider(provider)
+      try {
+        web3Modal = new Web3Modal({
+          network: 'mainnet', // optional
+          cacheProvider: true,
+          providerOptions, // required
+        })
+        const provider = await web3Modal.connect()
+        const web3Provider = new providers.Web3Provider(provider)
 
-      const signer = web3Provider.getSigner()
-      const address = await signer.getAddress()
+        const signer = web3Provider.getSigner()
+        const address = await signer.getAddress()
 
-      const contract_20 = new ethers.Contract(
-        SMARTCONTRACT_ADDRESS_ERC20,
-        SMARTCONTRACT_ABI_ERC20,
-        signer
-      )
+        const contract_20 = new ethers.Contract(
+          SMARTCONTRACT_ADDRESS_ERC20,
+          SMARTCONTRACT_ABI_ERC20,
+          signer
+        )
 
-      const bal = await contract_20.balanceOf(address)
-      setSignerBalance(ethers.utils.formatEther(bal))
-      setLoading(false)
-      setConnected(true)
-      setSignerAddress(address)
+        const bal = await contract_20.balanceOf(address)
+        setSignerBalance(ethers.utils.formatEther(bal))
+        setLoading(false)
+        setConnected(true)
+        setSignerAddress(address)
 
-      // Subscribe to accounts change
-      provider.on("accountsChanged", (accounts) => {
-        setSignerAddress(accounts[0])
-      });
+        // Subscribe to accounts change
+        provider.on("accountsChanged", (accounts) => {
+          setSignerAddress(accounts[0])
+        });
 
-      // Subscribe to chainId change
-      provider.on("chainChanged", (chainId) => {
-        window.location.reload()
-      });
+        // Subscribe to chainId change
+        provider.on("chainChanged", (chainId) => {
+          window.location.reload()
+        });
+      } catch(e) {
+        console.log(e)
+      }
     }
   }
 

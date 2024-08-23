@@ -4,7 +4,7 @@ import Countdown from 'react-countdown'
 import ClipLoader from "react-spinners/ClipLoader"
 import { errorAlert, successAlert, warningAlert } from './toastGroup'
 import { ethers } from "ethers"
-import { SMARCONTRACT_INI_ABI, SMARTCONTRACT_ABI, SMARTCONTRACT_ABI_ERC20, SMARTCONTRACT_ADDRESS, SMARTCONTRACT_ADDRESS_ERC20 } from "../../config"
+import CONFIG from "../../config"
 import Swal from 'sweetalert2'
 import CardModal from "./CardModal"
 import Web3Modal from "web3modal"
@@ -46,6 +46,7 @@ export default function NFTCard({
   const [realName, setRealName] = useState("")
   const [indiContract, setIndiContract] = useState([])
   const [unloading, setUnloading] = useState(false)
+  const { SMARCONTRACT_INI_ABI, SMARTCONTRACT_ABI, SMARTCONTRACT_ABI_ERC20, SMARTCONTRACT_ADDRESS, SMARTCONTRACT_ADDRESS_ERC20 } = CONFIG.BINANCE
 
   const alertBox = (err) => {
     setUnloading(false)

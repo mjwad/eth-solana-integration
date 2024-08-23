@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from 'next/link'
 import { ConnectButton } from "./styleHook"
 import { Skeleton } from "@mui/material"
@@ -6,6 +6,7 @@ import { Skeleton } from "@mui/material"
 export default function Header({
   signerAddress,
   connectWallet,
+  disconnectWallet,
   connected,
   signerBalance,
   loading,
@@ -70,6 +71,13 @@ export default function Header({
                 }
               </ConnectButton>
             </li>
+            {connected && (
+              <li className="disconnect-button">
+                <ConnectButton onClick={disconnectWallet} disabled={!connected}>
+                  Disconnect
+                </ConnectButton>
+              </li>
+            )}
           </ul>
         </div>
 
@@ -81,6 +89,13 @@ export default function Header({
                 "Connect"
               }
             </ConnectButton>
+            
+            {connected && (
+              <ConnectButton onClick={disconnectWallet} disabled={!connected} style={{ marginRight: 10 }}>
+                Disconnect
+              </ConnectButton> 
+            )}
+
             <div className="hamburger" style={{ position: !open ? "absolute" : "fixed" }}>
               <button onClick={() => setOpen(!open)} className="ham" style={{ right: !open ? 10 : 25, top: !open ? 10 : 25 }}>
                 {!open ?
